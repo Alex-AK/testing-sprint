@@ -26,6 +26,12 @@ describe('Server', () => {
         genre: 'Arcade'
       };
       expect(testData).toEqual(properFormat);
+
+      //   const res = response(server)
+      //   .post('/api/games')
+      //   .send(testData);
+
+      // expect(res.status).toEqual(201);
     });
 
     it('missing required field returns 422 Unprocessable Entity', async () => {
@@ -57,14 +63,14 @@ describe('Server', () => {
       expect(res.data).toBe([]);
     });
 
-    it.skip('returns json format', () => {
+    it.skip('returns json format', async () => {
       // test json return
-      const res = await request(server).get('/api/games')
+      const res = await request(server).get('/api/games');
 
-      expect(res.type).toBe('application/json')
+      expect(res.type).toBe('application/json');
     });
 
-    it.skip('returns empty array if no data stored', () => {
+    it.skip('returns empty array if no data stored', async () => {
       // endpoint should return an array, even if no data is stored
       const res = await request(server).get('/api/games');
 
