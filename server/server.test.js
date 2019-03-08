@@ -9,10 +9,12 @@ const testData = {
 };
 
 describe('Server', () => {
-  describe('POST request to "/games" endpoint', () => {
+  describe('POST request to "/api/games" endpoint', () => {
     it('successful post returns 201 Created', async () => {
       // write test to verify status code responses
-      const res = await request(server).post(testData);
+      const res = await request(server)
+        .post('/api/games')
+        .send(testData);
 
       expect(res.status).toBe(201);
     });
@@ -26,33 +28,47 @@ describe('Server', () => {
       expect(testData).toEqual(properFormat);
     });
 
-    it.skip('missing required field returns 422 Unprocessable Entity', () => {
+    it('missing required field returns 422 Unprocessable Entity', async () => {
       // if information is incomplete return 422
-      const missingField = {
-        title: 'Pacman',
+      const missingAField = {
+        title: 'Pacman'
       };
 
-      const res = await request(server).post(missingField);
+      const res = await request(server)
+        .post('/api/games')
+        .send(missingAField);
 
       expect(res.status).toBe(422);
     });
   });
 
-  describe('GET request to "/games" endpoint', () => {
-    it.skip('successful get returns 200 OK', () => {
+  describe('GET request to "/api/games" endpoint', () => {
+    it('successful get returns 200 OK', async () => {
       // write test to verify status code responses
+      const res = await request(server).get('/api/games');
+
+      expect(res.status).toBe(200);
     });
 
-    it.skip('returns list of games as an array', () => {
+    it.skip('returns list of games as an array', async () => {
       // endpoint should return list of games
+      const res = await request(server).get('/api/games');
+
+      expect(res.data).toBe([]);
     });
 
     it.skip('returns json format', () => {
       // test json return
+      const res = await request(server).get('/api/games')
+
+      expect(res.type).toBe('application/json')
     });
 
     it.skip('returns empty array if no data stored', () => {
       // endpoint should return an array, even if no data is stored
+      const res = await request(server).get('/api/games');
+
+      expect(res.data).toBe([]);
     });
   });
 });
