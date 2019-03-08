@@ -2,7 +2,7 @@ const express = require('express');
 
 const server = express();
 
-const games = require('../data/game-model');
+const db = require('../data/game-model');
 
 server.use(express.json());
 
@@ -12,15 +12,15 @@ server.get('/', (req, res) => {
 
 server.get('/api/games', async (req, res) => {
   try {
-    const games = await games.getAll();
+    const games = await db.getAll();
 
     if (games) {
       res.status(200).json(games);
     } else {
-      res.status(200).send([]);
+      res.status(200).json({ games: [] });
     }
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: 'Failed to get games', error });
   }
 });
 
@@ -33,15 +33,17 @@ server.post('/api/games', async (req, res) => {
   }
 
   try {
-    const added = await games.add(newGame);
+    const added = await db.add(newGame);
 
     if (added) {
       res.status(201).json({ message: 'Game successfully added', newGame });
     } else {
-      res.status();
+      res
+        .status(400)
+        .json({ message: 'Server could not understand your request' });
     }
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500);
   }
 });
 
