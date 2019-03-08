@@ -9,6 +9,7 @@ const testData = {
   genre: 'Arcade' // required
   // releaseYear: 1980 // not required
 };
+
 afterEach(async () => {
   await db('games').truncate();
 });
@@ -46,6 +47,23 @@ describe('Server', () => {
         .send(incorrectFieldName);
 
       expect(res.status).toBe(422);
+    });
+
+    it.skip('non-unique title returns 405 Not Allowed', async () => {
+      const nonUniqueTitle = {
+        title: 'Pacman',
+        genre: 'Arcade'
+      };
+
+      request(server)
+        .post('/api/games')
+        .send(testData);
+
+      const res2 = await request(server)
+        .post('/api/games')
+        .send(nonUniqueTitle);
+
+      expect(res2).toBe(405);
     });
   });
 
