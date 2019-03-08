@@ -4,22 +4,37 @@ const server = require('./server');
 
 const testData = {
   title: 'Pacman', // required
-  genre: 'Arcade', // required
-  releaseYear: 1980 // not required
+  genre: 'Arcade' // required
+  // releaseYear: 1980 // not required
 };
 
 describe('Server', () => {
   describe('POST request to "/games" endpoint', () => {
-    it.skip('successful post returns 201 Created', () => {
+    it('successful post returns 201 Created', async () => {
       // write test to verify status code responses
+      const res = await request(server).post(testData);
+
+      expect(res.status).toBe(201);
     });
 
-    it.skip('post receives proper body and required fields', () => {
+    it('post receives proper body format and required fields', async () => {
       // validate required field is in body
+      const properFormat = {
+        title: 'Pacman',
+        genre: 'Arcade'
+      };
+      expect(testData).toEqual(properFormat);
     });
 
     it.skip('missing required field returns 422 Unprocessable Entity', () => {
       // if information is incomplete return 422
+      const missingField = {
+        title: 'Pacman',
+      };
+
+      const res = await request(server).post(missingField);
+
+      expect(res.status).toBe(422);
     });
   });
 
